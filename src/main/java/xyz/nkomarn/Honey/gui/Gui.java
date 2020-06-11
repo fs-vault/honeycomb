@@ -24,6 +24,9 @@ public class Gui {
     private final Player player;
     private final int size;
 
+    // TODO method to set inventory name on the fly
+    // https://www.spigotmc.org/threads/how-to-set-the-title-of-an-open-inventory-itemgui.95572/
+
     /**
      * Creates a new Gui Inventory with a provided player, title, and size.
      * @param player The player to open the Gui to when open() is called.
@@ -173,7 +176,7 @@ public class Gui {
         if (event.getClickedInventory() != null && event.getClickedInventory().equals(this.inventory)) {
             for (GuiButton button : this.buttons) {
                 if (button.getSlot() == event.getSlot()) {
-                    button.handleClick(event.isShiftClick());
+                    if (button.getCallback() != null) button.getCallback().handle(button, event.getClick());
                     player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.6f, 0.6f);
                     return;
                 }

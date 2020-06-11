@@ -1,6 +1,7 @@
 package xyz.nkomarn.Honey.gui;
 
 import org.bukkit.Material;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,11 +28,7 @@ public class GuiButton {
         this.item = item;
         this.slot = slot;
         this.callback = callback;
-        item.addItemFlags(
-                ItemFlag.HIDE_ENCHANTS,
-                ItemFlag.HIDE_ATTRIBUTES,
-                ItemFlag.HIDE_POTION_EFFECTS
-        );
+        item.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
     }
 
     /**
@@ -48,6 +45,14 @@ public class GuiButton {
      */
     public int getSlot() {
         return this.slot;
+    }
+
+    /**
+     * Returns the callback for this GuiButton.
+     * @return The callback with code to run on click.
+     */
+    public GuiButtonCallback getCallback() {
+        return this.callback;
     }
 
     /**
@@ -77,18 +82,10 @@ public class GuiButton {
     }
 
     /**
-     * Handles a click event and runs the callback of this GuiButton.
-     * @param shiftClicked Whether the GuiButton was shift-clicked in the Gui Inventory.
-     */
-    public void handleClick(boolean shiftClicked) {
-        if (this.callback != null) callback.handle(this, shiftClicked);
-    }
-
-    /**
      * Represents a callback for GuiButton click in the Gui Inventory.
      */
     @FunctionalInterface
     public interface GuiButtonCallback {
-        void handle(GuiButton button, boolean shiftClicked);
+        void handle(GuiButton button, ClickType clickType);
     }
 }
