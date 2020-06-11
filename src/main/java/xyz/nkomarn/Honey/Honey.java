@@ -8,6 +8,7 @@ public class Honey extends JavaPlugin {
 
     public void onEnable() {
         honey = this;
+        getServer().getPluginManager().registerEvents(new GuiHandler(), this);
     }
 
     public void onDisable() {
