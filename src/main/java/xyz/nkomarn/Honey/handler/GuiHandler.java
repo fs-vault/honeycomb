@@ -7,7 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import xyz.nkomarn.Honey.Honey;
+import xyz.nkomarn.Honey.Honeycomb;
 import xyz.nkomarn.Honey.gui.Gui;
 
 import java.util.Collections;
@@ -28,7 +28,7 @@ public class GuiHandler implements Listener {
             Gui gui = getCurrentGui(event.getWhoClicked().getUniqueId());
             if (gui != null) {
                 event.setCancelled(true);
-                Bukkit.getScheduler().runTaskAsynchronously(Honey.getHoney(),
+                Bukkit.getScheduler().runTaskAsynchronously(Honeycomb.getHoneycomb(),
                         () -> gui.handleClick(event));
             }
         }

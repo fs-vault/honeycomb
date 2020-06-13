@@ -1,9 +1,8 @@
-![Honey](https://i.imgur.com/JWBFtHv.png)
-# Honey
+![Honeycomb](https://i.imgur.com/pzwB04b.png)
 ### A dead simple and easy to use Spigot GUI library.
-[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/nkomarn/Honey/blob/master/LICENSE) [![Discord](https://discordapp.com/api/guilds/645808053001781279/widget.png?style=shield)](https://discord.gg/wPNY8Yk)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/nkomarn/Honeycomb/blob/master/LICENSE) [![Discord](https://discordapp.com/api/guilds/645808053001781279/widget.png?style=shield)](https://discord.gg/wPNY8Yk)
 
-Honey was designed to be as easy to use as possible, allowing easy creation of GUIs that doesn't involve hacky shit with listeners and consistently works. Creating and opening a GUI is as simple as this:
+Honeycomb was designed to be as easy to use as possible, allowing easy creation of GUIs that doesn't involve hacky shit with listeners and consistently works. Creating and opening a GUI is as simple as this:
 
 ### 🚩 Creating + Opening a GUI
 ![GUI Example](https://i.imgur.com/JOT3uBg.png)
@@ -35,25 +34,30 @@ gui.open();
 ```
 
 ### 🔨 Using the Library
-You can directly chuck it into Maven using the hosted version on [JitPack](https://jitpack.io/#nkomarn/Honey). Don't shade Honey into your plugin- instead, add it as a dependency in your `plugin.yml` and install it on your server. Latest builds are available over at the [releases page](https://github.com/nkomarn/Honey/releases).
+Don't shade Honeycomb into your plugin- instead, add it as a dependency in your `plugin.yml` and install it on your server. Latest builds are available over at the [releases page](https://github.com/nkomarn/Honeycomb/releases).
+```yaml
+depend: ['Honeycomb']
+```
+
+You can directly chuck Honeycomb into Maven using the latest hosted version on [JitPack](https://jitpack.io/#nkomarn/Honeycomb). 
 
 ```xml
 <repository>
-	<id>jitpack.io</id>
-	<url>https://jitpack.io</url>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
 </repository>
 ```
 
 ```xml
 <dependency>
-	<groupId>com.github.nkomarn</groupId>
-	<artifactId>Honey</artifactId>
-	<version>Version tag from JitPack</version>
+    <groupId>com.github.nkomarn</groupId>
+    <artifactId>Honeycomb</artifactId>
+    <version>Version tag from JitPack</version>
     <scope>provided</scope>
 </dependency>
 ```
 
 ### 🙌 It's as easy as that.
-Creating GUIs has never been simpler. All registration and handling is automatically taken care of for you, allowing you to focus on realizing your idea rather than figuring out how to do it- and that's the philosophy behind Honey.
+Creating GUIs has never been simpler. All registration and handling is automatically taken care of for you, allowing you to focus on realizing your idea rather than figuring out how to do it- and that's the philosophy behind Honeycomb.
 
-Honey is a standalone version of the GUI library from [Kerosene](https://github.com/firestarter/kerosene). I always struggled with clunky GUI solutions when making plugins for Firestarter, and after stumbling across the GUI system of [PlayerParticles](https://github.com/Esophose/PlayerParticles), I was heavily inspired to create this system. I hope you enjoy using it as much as I do. ✨
+Honeycomb is a standalone version of the GUI library from [Kerosene](https://github.com/firestarter/kerosene). I always struggled with clunky GUI solutions when making plugins for [Firestarter](https://github.com/firestarter), and after stumbling across the GUI system of [PlayerParticles](https://github.com/Esophose/PlayerParticles), I was heavily inspired to create this system. I hope you enjoy using it as much as I do. ✨

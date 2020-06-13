@@ -1,7 +1,7 @@
 name: Honey
 version: 1.0
 author: TechToolbox (@nkomarn)
-main: xyz.nkomarn.Honey.Honey
+main: xyz.nkomarn.Honeycomb.Honeycomb
 description: A dead simple and easy to use GUI library.
 website: https://nkomarn.xyz
 api-version: 1.13

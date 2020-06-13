@@ -3,11 +3,11 @@ package xyz.nkomarn.Honey;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.nkomarn.Honey.handler.GuiHandler;
 
-public class Honey extends JavaPlugin {
-    private static Honey honey;
+public class Honeycomb extends JavaPlugin {
+    private static Honeycomb honeycomb;
 
     public void onEnable() {
-        honey = this;
+        honeycomb = this;
         getServer().getPluginManager().registerEvents(new GuiHandler(), this);
     }
 
@@ -15,7 +15,7 @@ public class Honey extends JavaPlugin {
         GuiHandler.closeAll();
     }
 
-    public static Honey getHoney() {
-        return honey;
+    public static Honeycomb getHoneycomb() {
+        return honeycomb;
     }
 }

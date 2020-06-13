@@ -2,7 +2,6 @@ package xyz.nkomarn.Honey.gui;
 
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -28,7 +27,6 @@ public class GuiButton {
         this.item = item;
         this.slot = slot;
         this.callback = callback;
-        item.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
     }
 
     /**
