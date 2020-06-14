@@ -1,36 +1,42 @@
 ![Honeycomb](https://i.imgur.com/pzwB04b.png)
-### A dead simple and easy to use Spigot GUI library.
+### A dead simple and easy to use Spigot GUI Menu library.
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/nkomarn/Honeycomb/blob/master/LICENSE) [![Discord](https://discordapp.com/api/guilds/645808053001781279/widget.png?style=shield)](https://discord.gg/wPNY8Yk)
 
-Honeycomb was designed to be as easy to use as possible, allowing easy creation of GUIs that doesn't involve hacky shit with listeners and consistently works. Creating and opening a GUI is as simple as this:
+Honeycomb was designed to be as easy to use as possible, allowing easy creation of GUI menus that doesn't involve hacky shit with listeners and consistently works. Creating and opening a menu is as simple as this:
 
-### 🚩 Creating + Opening a GUI
-![GUI Example](https://i.imgur.com/JOT3uBg.png)
+### 🚩 Creating + Opening a Menu
+![GUI Example](https://i.imgur.com/ULpJpUR.png)
 
-Here's the code used to make that GUI:
+Here's the code used to make that menu:
 ```java
-// Define the GUI and add borders and fills.
-Gui gui = new Gui(player, "Honey GUI", 27);
-gui.fill(Material.WHITE_STAINED_GLASS_PANE);
-gui.fillBorderAlternating(Material.ORANGE_STAINED_GLASS_PANE, Material.RED_STAINED_GLASS_PANE);
+// Define the menu and add borders and fills.
+Menu menu = new Menu(player, "Honeycomb Menu", 27);
+menu.fill(Material.WHITE_STAINED_GLASS_PANE);
+menu.fillBorderAlternating(
+    Material.PINK_STAINED_GLASS_PANE,
+    Material.MAGENTA_STAINED_GLASS_PANE);
 
 // This is the ItemStack we'll use to represent the button.
-ItemStack honeyButton = new ItemStack(Material.HONEY_BLOCK);
-ItemMeta honeyMeta = honeyButton.getItemMeta();
-honeyMeta.setDisplayName(ChatColor.GOLD + "Honey");
-honeyMeta.setLore(Collections.singletonList(ChatColor.GRAY + "Click me!"));
-honeyButton.setItemMeta(honeyMeta);
+ItemStack buttonItem = new ItemStack(Material.HONEYCOMB);
+ItemMeta buttonMeta = buttonItem.getItemMeta();
+buttonMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&lHoneycomb"));
+buttonMeta.setLore(Arrays.asList(
+    ChatColor.GRAY + "A simple menu button.",
+    ChatColor.YELLOW + "Click me!"
+));
+buttonItem.setItemMeta(buttonMeta);
 
-// Add a clickable button to the GUI.
-gui.addButton(new GuiButton(gui, honeyButton, 13, (button, clickType) -> {
+// Add a clickable button to the menu.
+menu.addButton(new MenuButton(menu, buttonItem, 13, (button, clickType) -> {
     // Stuff in here runs when the button is pressed.
     // Use ClickType to check for left-, right-, and shift-click.
-    button.setType(Material.HONEYCOMB_BLOCK);
-    gui.getPlayer().playSound(gui.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
+    // button.setMaterial(Material.HONEY_BOTTLE);
+    menu.getPlayer().playSound(menu.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f, 1.f);
+    openOtherMenu(player);
 }));
 
-// Finally, open the GUI to the player.
-gui.open();
+// Finally, open the menu to the player.
+menu.open();
 ```
 
 ### 🔨 Using the Library
@@ -58,6 +64,6 @@ You can directly chuck Honeycomb into Maven using the latest hosted version on [
 ```
 
 ### 🙌 It's as easy as that.
-Creating GUIs has never been simpler. All registration and handling is automatically taken care of for you, allowing you to focus on realizing your idea rather than figuring out how to do it- and that's the philosophy behind Honeycomb.
+Creating GUI menus has never been simpler. All registration and handling is automatically taken care of for you, allowing you to focus on realizing your idea rather than figuring out how to do it- and that's the philosophy behind Honeycomb.
 
 Honeycomb is a standalone version of the GUI library from [Kerosene](https://github.com/firestarter/kerosene). I always struggled with clunky GUI solutions when making plugins for [Firestarter](https://github.com/firestarter), and after stumbling across the GUI system of [PlayerParticles](https://github.com/Esophose/PlayerParticles), I was heavily inspired to create this system. I hope you enjoy using it as much as I do. ✨

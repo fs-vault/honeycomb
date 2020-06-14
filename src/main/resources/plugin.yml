@@ -1,5 +1,5 @@
-name: Honey
-version: 1.0
+name: Honeycomb
+version: 1.1
 author: TechToolbox (@nkomarn)
 main: xyz.nkomarn.Honeycomb.Honeycomb
 description: A dead simple and easy to use GUI library.
