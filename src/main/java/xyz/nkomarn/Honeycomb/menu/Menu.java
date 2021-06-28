@@ -1,185 +1,182 @@
-package xyz.nkomarn.Honeycomb.menu;
+package xyz.nkomarn.honeycomb.menu;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import xyz.nkomarn.Honeycomb.Honeycomb;
-import xyz.nkomarn.Honeycomb.handler.MenuHandler;
+import org.jetbrains.annotations.NotNull;
+import xyz.nkomarn.honeycomb.interaction.Interactive;
+import xyz.nkomarn.honeycomb.menu.element.Element;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 
 /**
- * Represents a Gui Inventory with buttons.
- * Makes it easy to create Guis in-game with minimal effort.
+ * Represents a graphical user interface which is backed by a
+ * container menu, also known as an inventory. {@link Element}s
+ * can be added to the menu and they will be rendered when the
+ * menu is created.
+ * <p>
+ * Multiple players can view the same menu at a time.
+ *
+ * @since 1.1
  */
-public class Menu {
-    private final Inventory inventory;
-    private final Map<Integer, MenuButton> buttons = new HashMap<>();
-    private final Player player;
-    private final int size;
-
-    // TODO method to set inventory name on the fly
-    // https://www.spigotmc.org/threads/how-to-set-the-title-of-an-open-inventory-itemgui.95572/
+public interface Menu extends Interactive {
 
     /**
-     * Creates a new Gui Inventory with a provided player, title, and size.
+     * Returns the backing {@link Inventory} for this menu.
      *
-     * @param player The player to open the Gui to when open() is called.
-     * @param name   The title of the Gui Inventory.
-     * @param size   The size of the Gui Inventory, in slots (must be a multiple of 9).
+     * @return The backing Bukkit inventory.
+     * @since 1.1
      */
-    public Menu(Player player, String name, int size) {
-        this.inventory = Bukkit.createInventory(player, size, name);
-        this.player = player;
-        this.size = size;
-    }
+    @NotNull
+    Inventory inventory();
 
     /**
-     * Return the Inventory instance tied to this Gui.
+     * Renders an array of {@link Element}s on top of this
+     * menu, directly affecting the backing inventory.
      *
-     * @return The Inventory instance of this Gui.
+     * @param elements Vararg of elements to render.
+     * @since 1.1
      */
-    public Inventory getInventory() {
-        return this.inventory;
-    }
+    void addElements(@NotNull Element... elements);
 
     /**
-     * Returns the player the Gui is being displayed to.
+     * Returns an immutable collection of players that are
+     * currently viewing this menu.
      *
-     * @return The player that the Gui is displayed to.
+     * @return A collection of viewers.
+     * @since 1.1
      */
-    public Player getPlayer() {
-        return this.player;
-    }
+    @NotNull
+    Collection<Player> viewers();
 
     /**
-     * Binds a GuiButton instance to the Gui, effectively creating a clickable action.
+     * Returns whether a given player is currently viewing
+     * the backing inventory of this menu.
      *
-     * @param button An instance of the GuiButton to add to the Gui.
+     * @param player The player to check.
+     * @return Whether the given player is viewing this menu.
+     * @since 1.1
      */
-    public void addButton(MenuButton button) {
-        this.buttons.put(button.getSlot(), button);
-    }
+    boolean isViewing(@NotNull Player player);
 
     /**
-     * Returns an ItemStack for the specified Material. Used when filling the Gui.
+     * Displays the rendered backing inventory to the given
+     * array of players.
      *
-     * @param material The Material to make the ItemStack out of.
-     * @return An ItemStack with the specified Material and a blank display name.
+     * @param players Vararg of players to display to.
+     * @since 1.1
      */
-    private ItemStack getFillItem(Material material) {
-        ItemStack fill = new ItemStack(material);
-        ItemMeta fillMeta = fill.getItemMeta();
-        fillMeta.setDisplayName(" ");
-        fill.setItemMeta(fillMeta);
-        return fill;
-    }
+    void open(@NotNull Player... players);
 
     /**
-     * Fills the whole Inventory with a solid Material.
+     * Forcibly closes the menu for the given array of players.
+     * If a player is not currently viewing the menu, the
+     * player will be silently skipped.
      *
-     * @param material The Material with which to fill the whole Inventory.
+     * @param players Vararg of players to close for.
+     * @since 1.1
      */
-    public void fill(Material material) {
-        ItemStack fill = getFillItem(material);
-
-        for (int i = 0; i < size; i++) {
-            inventory.setItem(i, fill);
-        }
-    }
+    void close(@NotNull Player... players);
 
     /**
-     * Fills the border of the Inventory with a solid Material.
+     * Forcibly closes the menu for all viewing players.
      *
-     * @param material The Material with which to fill the border of the Inventory.
+     * @since 1.1
      */
-    public void fillBorder(Material material) {
-        ItemStack fill = getFillItem(material);
-
-        for (int i = 0; i < 9; i++) { // Top
-            inventory.setItem(i, fill);
-        }
-
-        for (int i = size - 9; i < size; i++) { // Bottom
-            inventory.setItem(i, fill);
-        }
-
-        for (int i = 0; i < size; i += 9) { // Left
-            inventory.setItem(i, fill);
-        }
-
-        for (int i = 8; i < size; i += 9) { // Right
-            this.inventory.setItem(i, fill);
-        }
-    }
+    void close();
 
     /**
-     * Fills the border of the Inventory with two alternating Material types.
+     * Sends an inventory update packet for the backing inventory.
+     * This resends the full inventory.
      *
-     * @param materialOne The first Material, which only displays on odd slots.
-     * @param materialTwo The second Material, which only displays on even slots.
+     * @since 1.1
      */
-    public void fillBorderAlternating(Material materialOne, Material materialTwo) {
-        ItemStack fillOne = getFillItem(materialOne);
-        ItemStack fillTwo = getFillItem(materialTwo);
-
-        for (int i = 0; i < 9; i++) { // Top
-            if (i % 2 == 0) inventory.setItem(i, fillOne);
-            else inventory.setItem(i, fillTwo);
-        }
-
-        for (int i = size - 9; i < size; i++) { // Bottom
-            if (i % 2 == 0) inventory.setItem(i, fillOne);
-            else inventory.setItem(i, fillTwo);
-        }
-
-        for (int i = 0; i < size; i += 9) { // Left
-            if (i % 2 == 0) inventory.setItem(i, fillOne);
-            else inventory.setItem(i, fillTwo);
-        }
-
-        for (int i = 8; i < size; i += 9) { // Right
-            if (i % 2 == 0) inventory.setItem(i, fillOne);
-            else inventory.setItem(i, fillTwo);
-        }
-    }
+    void update();
 
     /**
-     * Registers this Gui in the GuiHandler and then opens it synchronously to the player.
-     */
-    public void open() {
-        buttons.forEach((slot, button) -> inventory.setItem(slot, button.getItem()));
-        Bukkit.getScheduler().runTask(Honeycomb.getHoneycomb(), () -> {
-            player.openInventory(inventory);
-            MenuHandler.registerMenu(this);
-        });
-    }
-
-    /**
-     * Closes the GUI Inventory synchronously.
-     */
-    public void close() {
-        Bukkit.getScheduler().runTask(Honeycomb.getHoneycomb(), (Runnable) player::closeInventory);
-    }
-
-    /**
-     * Called when a GuiButton is clicked and handles the execution of the button's code.
+     * A builder for menus, intended to make creation of menus
+     * easier through variable options rather than a large
+     * selection of constructors.
      *
-     * @param event An instance of the InventoryClickEvent.
+     * @since 1.1
      */
-    public void handleClick(InventoryClickEvent event) {
-        if (event.getClickedInventory() != null && event.getClickedInventory().equals(this.inventory)) {
-            MenuButton button = this.buttons.get(event.getSlot());
-            if (button != null) {
-                if (button.getCallback() != null) button.getCallback().handle(button, event.getClick());
-                player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.6f, 0.6f);
-            }
-        }
+    interface Builder {
+
+        /**
+         * Sets the {@link InventoryType} of the backing inventory.
+         *
+         * @param type The inventory container type.
+         * @return This builder instance.
+         * @since 1.1
+         */
+        @NotNull
+        Builder type(@NotNull InventoryType type);
+
+        /**
+         * Sets the text displayed at the top of the menu when
+         * a player is viewing it.
+         *
+         * @param title The text to display.
+         * @return This builder instance.
+         * @since 1.1
+         */
+        @NotNull
+        Builder title(@NotNull String title);
+
+        /**
+         * Sets the amount of slots contained in the backing
+         * inventory for this menu. This number must be between
+         * zero and fifty-four.
+         * <p>
+         * For {@link InventoryType}s other than {@link InventoryType#CHEST},
+         * this value is ignored and instead is automatically populated
+         * using {@link InventoryType#getDefaultSize()}.
+         *
+         * @param size The amount of slots to use.
+         * @return This builder instance.
+         * @since 1.1
+         */
+        @NotNull
+        Builder size(int size);
+
+        /**
+         * Sets the amount of rows of slots contained in the backing
+         * inventory for this menu. This number must be between one
+         * and six.
+         * <p>
+         * This is a simpler way to set the size of the inventory
+         * by specifying rows rather than individual slot counts.
+         * <p>
+         * For {@link InventoryType}s other than {@link InventoryType#CHEST},
+         * this value is ignored and instead is automatically populated
+         * using {@link InventoryType#getDefaultSize()}.
+         *
+         * @param rows The amount of rows to use.
+         * @return This builder instance.
+         * @since 1.1
+         */
+        @NotNull
+        Builder rows(int rows);
+
+        /**
+         * Adds an {@link Element} to this menu, setting it to be rendered
+         * when the backing inventory is created.
+         *
+         * @param element The element to render.
+         * @return This builder instance.
+         * @since 1.1
+         */
+        @NotNull
+        Builder element(@NotNull Element element);
+
+        /**
+         * Creates a new {@link Menu} instance based on parameters
+         * used in this builder.
+         *
+         * @return A new menu instance with specified parameters.
+         * @since 1.1
+         */
+        @NotNull
+        Menu build();
     }
 }
