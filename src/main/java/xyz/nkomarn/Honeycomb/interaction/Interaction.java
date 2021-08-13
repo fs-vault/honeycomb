@@ -6,12 +6,12 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 import xyz.nkomarn.honeycomb.menu.Menu;
-import xyz.nkomarn.honeycomb.menu.element.Element;
+import xyz.nkomarn.honeycomb.menu.element.ContextualElement;
 
 /**
  * Represents information on a specific player
  * interaction with a {@link Menu} or an individual
- * menu {@link Element}.
+ * menu {@link ContextualElement}.
  * <p>
  * This interaction is cancelable.
  *

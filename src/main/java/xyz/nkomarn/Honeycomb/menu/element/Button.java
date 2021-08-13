@@ -16,6 +16,10 @@ public class Button extends Item implements Interactive {
 
     @Override
     public void handleInteraction(@NotNull Interaction interaction) {
+        if (slot() != interaction.slot()) {
+            return;
+        }
+
         handler.onInteract(this, interaction);
     }
 

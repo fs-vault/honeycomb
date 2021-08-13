@@ -4,14 +4,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import xyz.nkomarn.honeycomb.interaction.Interactive;
+import xyz.nkomarn.honeycomb.menu.element.ContextualElement;
 import xyz.nkomarn.honeycomb.menu.element.Element;
 
 import java.util.Collection;
 
 /**
  * Represents a graphical user interface which is backed by a
- * container menu, also known as an inventory. {@link Element}s
+ * container menu, also known as an inventory. {@link ContextualElement}s
  * can be added to the menu and they will be rendered when the
  * menu is created.
  * <p>
@@ -22,6 +24,18 @@ import java.util.Collection;
 public interface Menu extends Interactive {
 
     /**
+     * Creates a new menu {@link Builder} instance, used to
+     * create menus.
+     *
+     * @return A new menu builder instance.
+     * @since 1.1
+     */
+    @NotNull
+    static Builder builder() {
+        return new InteractiveMenu.Builder();
+    }
+
+    /**
      * Returns the backing {@link Inventory} for this menu.
      *
      * @return The backing Bukkit inventory.
@@ -29,6 +43,16 @@ public interface Menu extends Interactive {
      */
     @NotNull
     Inventory inventory();
+
+    /**
+     * Returns a mutable collection of {@link Element}s that are
+     * bound to this menu and are applicable for rendering.
+     *
+     * @return A collection of elements.
+     * @since 1.1
+     */
+    @NotNull
+    Collection<Element> elements();
 
     /**
      * Renders an array of {@link Element}s on top of this
@@ -47,6 +71,7 @@ public interface Menu extends Interactive {
      * @since 1.1
      */
     @NotNull
+    @Unmodifiable
     Collection<Player> viewers();
 
     /**
@@ -92,91 +117,4 @@ public interface Menu extends Interactive {
      * @since 1.1
      */
     void update();
-
-    /**
-     * A builder for menus, intended to make creation of menus
-     * easier through variable options rather than a large
-     * selection of constructors.
-     *
-     * @since 1.1
-     */
-    interface Builder {
-
-        /**
-         * Sets the {@link InventoryType} of the backing inventory.
-         *
-         * @param type The inventory container type.
-         * @return This builder instance.
-         * @since 1.1
-         */
-        @NotNull
-        Builder type(@NotNull InventoryType type);
-
-        /**
-         * Sets the text displayed at the top of the menu when
-         * a player is viewing it.
-         *
-         * @param title The text to display.
-         * @return This builder instance.
-         * @since 1.1
-         */
-        @NotNull
-        Builder title(@NotNull String title);
-
-        /**
-         * Sets the amount of slots contained in the backing
-         * inventory for this menu. This number must be between
-         * zero and fifty-four.
-         * <p>
-         * For {@link InventoryType}s other than {@link InventoryType#CHEST},
-         * this value is ignored and instead is automatically populated
-         * using {@link InventoryType#getDefaultSize()}.
-         *
-         * @param size The amount of slots to use.
-         * @return This builder instance.
-         * @since 1.1
-         */
-        @NotNull
-        Builder size(int size);
-
-        /**
-         * Sets the amount of rows of slots contained in the backing
-         * inventory for this menu. This number must be between one
-         * and six.
-         * <p>
-         * This is a simpler way to set the size of the inventory
-         * by specifying rows rather than individual slot counts.
-         * <p>
-         * For {@link InventoryType}s other than {@link InventoryType#CHEST},
-         * this value is ignored and instead is automatically populated
-         * using {@link InventoryType#getDefaultSize()}.
-         *
-         * @param rows The amount of rows to use.
-         * @return This builder instance.
-         * @since 1.1
-         */
-        @NotNull
-        Builder rows(int rows);
-
-        /**
-         * Adds an {@link Element} to this menu, setting it to be rendered
-         * when the backing inventory is created.
-         *
-         * @param element The element to render.
-         * @return This builder instance.
-         * @since 1.1
-         */
-        @NotNull
-        Builder element(@NotNull Element element);
-
-        /**
-         * Creates a new {@link Menu} instance based on parameters
-         * used in this builder.
-         *
-         * @return A new menu instance with specified parameters.
-         * @since 1.1
-         */
-        @NotNull
-        Menu build();
-    }
 }

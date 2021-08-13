@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
-import xyz.nkomarn.honeycomb.Honeycomb;
 import xyz.nkomarn.honeycomb.interaction.Interaction;
 import xyz.nkomarn.honeycomb.interaction.Interactive;
+import xyz.nkomarn.honeycomb.menu.element.ContextualElement;
 import xyz.nkomarn.honeycomb.menu.element.Element;
 import xyz.nkomarn.honeycomb.util.MathUtils;
 
@@ -33,20 +33,25 @@ public class InteractiveMenu implements Menu {
     private final List<Element> elements;
 
     public InteractiveMenu(@NotNull Menu.Builder builder) {
+        // TODO holder is wrong at this stage
         this(builder.build().inventory());
     }
 
     private InteractiveMenu(@NotNull Inventory inventory) {
         this.inventory = inventory;
         this.elements = new ArrayList<>();
-
-        Honeycomb.get().trackMenu(this);
     }
 
     @Override
     @NotNull
     public Inventory inventory() {
         return inventory;
+    }
+
+    @Override
+    @NotNull
+    public Collection<Element> elements() {
+        return elements;
     }
 
     @Override
@@ -92,12 +97,16 @@ public class InteractiveMenu implements Menu {
 
     @Override
     public void update() {
+        elements().stream()
+                .filter(Element::shouldRender)
+                .forEach(element -> element.render(this));
 
+        viewers().forEach(Player::updateInventory);
     }
 
     @Override
     public void handleInteraction(@NotNull Interaction interaction) {
-        elements.stream()
+        elements().stream()
                 .filter(element -> element instanceof Interactive)
                 .map(Interactive.class::cast)
                 .forEach(element -> element.handleInteraction(interaction));
@@ -105,7 +114,7 @@ public class InteractiveMenu implements Menu {
 
     public static class Builder implements Menu.Builder {
 
-        private final List<Element> elements;
+        private final List<ContextualElement> elements;
         private InventoryType type;
         private String title;
         private int size;
@@ -146,7 +155,7 @@ public class InteractiveMenu implements Menu {
 
         @Override
         @NotNull
-        public Menu.Builder element(@NotNull Element element) {
+        public Menu.Builder element(@NotNull ContextualElement element) {
             elements.add(element);
             return this;
         }
@@ -160,7 +169,7 @@ public class InteractiveMenu implements Menu {
                     : Bukkit.createInventory(holder, type, title);
             var menu = new InteractiveMenu(inventory);
 
-            menu.addElements(elements.toArray(new Element[0]));
+            menu.addElements(elements.toArray(new ContextualElement[0]));
             holder.menu(menu);
             return menu;
         }

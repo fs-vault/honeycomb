@@ -4,13 +4,14 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import xyz.nkomarn.honeycomb.menu.Menu;
 
-public class Item extends Element {
+public class Item extends ContextualElement {
 
-    private final ItemStack item;
+    private ItemStack item;
+    private boolean shouldRender;
 
     public Item(int slot, @NotNull ItemStack item) {
         super(slot);
-        this.item = item;
+        updateItem(item);
     }
 
     @NotNull
@@ -18,8 +19,19 @@ public class Item extends Element {
         return item;
     }
 
+    public void updateItem(@NotNull ItemStack item) {
+        this.item = item;
+        this.shouldRender = true;
+    }
+
+    @Override
+    public boolean shouldRender() {
+        return shouldRender;
+    }
+
     @Override
     public void render(@NotNull Menu menu) {
         menu.inventory().setItem(slot(), item());
+        this.shouldRender = false;
     }
 }
